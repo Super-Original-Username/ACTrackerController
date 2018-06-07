@@ -19,3 +19,5 @@ from PyQt5.QtGui import *
 
 import math
 import MySQLdb
+
+from ui_trck import trckGUI
