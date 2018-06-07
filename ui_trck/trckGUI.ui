@@ -101,11 +101,24 @@
     <string>Send Idle Command</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="acBtn">
+  <widget class="QPushButton" name="openBtn">
    <property name="geometry">
     <rect>
      <x>940</x>
      <y>260</y>
+     <width>311</width>
+     <height>46</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Open AirCore Valve</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closeBtn">
+   <property name="geometry">
+    <rect>
+     <x>939</x>
+     <y>340</y>
      <width>311</width>
      <height>46</height>
     </rect>

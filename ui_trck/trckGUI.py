@@ -39,9 +39,12 @@ class Ui_Dialog(object):
         self.idleBtn = QtWidgets.QPushButton(Dialog)
         self.idleBtn.setGeometry(QtCore.QRect(940, 160, 311, 46))
         self.idleBtn.setObjectName("idleBtn")
-        self.acBtn = QtWidgets.QPushButton(Dialog)
-        self.acBtn.setGeometry(QtCore.QRect(940, 260, 311, 46))
-        self.acBtn.setObjectName("acBtn")
+        self.openBtn = QtWidgets.QPushButton(Dialog)
+        self.openBtn.setGeometry(QtCore.QRect(940, 260, 311, 46))
+        self.openBtn.setObjectName("openBtn")
+        self.closeBtn = QtWidgets.QPushButton(Dialog)
+        self.closeBtn.setGeometry(QtCore.QRect(939, 340, 311, 46))
+        self.closeBtn.setObjectName("closeBtn")
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept)
@@ -55,7 +58,8 @@ class Ui_Dialog(object):
         self.label_2.setText(_translate("Dialog", "Current Coordinates"))
         self.cutdownBtn.setText(_translate("Dialog", "Send Cutdown Command"))
         self.idleBtn.setText(_translate("Dialog", "Send Idle Command"))
-        self.acBtn.setText(_translate("Dialog", "Close AirCore Valve"))
+        self.openBtn.setText(_translate("Dialog", "Open AirCore Valve"))
+        self.closeBtn.setText(_translate("Dialog", "Close AirCore Valve"))
 
 
 if __name__ == "__main__":
