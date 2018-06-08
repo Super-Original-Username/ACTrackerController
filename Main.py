@@ -2,6 +2,7 @@
 Iridium monitoring program for AirCore tracking and cutdown controls
 
 Author: Ethan Fison, CS, MSGC
+Based on the groundstation tracking software previously written by MSGC groups
 Purpose: Monitoring data from an Iridium modem used to track the location of an AirCore payload
 Creation Date: June 2018
 """
@@ -21,6 +22,7 @@ import math
 import MySQLdb
 
 from trckGUI import Ui_Dialog
+from dataGrabber import GetData
 
 
 class EventThread(QThread):
@@ -39,6 +41,11 @@ class WebEngine(QtWebEngine):
 
 
 class MainWindow(Ui_Dialog):
+
+    newCoords = pyqtSignal(GetData)
+
+    no_iridium = pyqtSignal()
+
     def __init__(self, dialog):
         Ui_Dialog.__init__(self)
         self.setupUi(dialog)
@@ -48,6 +55,7 @@ class MainWindow(Ui_Dialog):
         # self.iridiumThread.start()
         self.cmdThread.start()
 
+        # Setup for the main window buttons
         self.closeBtn.clicked.connect(self.close_valve)
         self.cutdownBtn.clicked.connect(self.attempt_cutdown)
         self.openBtn.clicked.connect(self.open_valve)
@@ -57,6 +65,10 @@ class MainWindow(Ui_Dialog):
         self.IMEI = ''
         self.email = ''
         self.passwd = ''
+        self.error_dialog = QtWidgets.QErrorMessage()
+        self.error_dialog.setWindowTitle('ERROR - Missing Information')
+        self.error_dialog.setModal(True)
+
 
     def close_valve(self):
         self.fetch_email()
@@ -75,14 +87,26 @@ class MainWindow(Ui_Dialog):
         print("Attempting to open valve")
 
     def start_tracking(self):
-        self.IMEI = str(self.IMEIBox.text())
-        print('Initializing tracking for modem with IMEI %s' % self.IMEI)
+        if self.IMEIBox.text() == '':
+            # Ideally, there will be an error message that pops up here instead of just printing the error
+            self.error_dialog.showMessage('Please enter an IMEI')
+            print('No IMEI entered, please enter one before starting tracking')
+        else:
+            self.IMEI = str(self.IMEIBox.text())
+            print('Initializing tracking for modem with IMEI %s' % self.IMEI)
 
     def fetch_email(self):
-        self.email = self.gmail.text()
-        self.passwd = self.gPass.text()
-        # This line probably isn't secure, but I'm still pretty new to python, so
-        # what can you do?
+        if self.gmail.text() == '' or self.gPass.text() == '':
+            self.error_dialog.showMessage('Please check that both the email and password fields are not empty')
+        else:
+            self.email = self.gmail.text()
+            self.passwd = self.gPass.text()
+        # This line probably isn't secure, but I'm still pretty new to python, so what can you do?
+
+    def update_position(self, new_data):
+        self.log_data
+
+
 
 
 app = QtWidgets.QApplication(sys.argv)
