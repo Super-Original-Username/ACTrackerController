@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\trckGUI.ui'
+# Form implementation generated from reading ui file 'trckGUI.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
@@ -58,6 +58,15 @@ class Ui_Dialog(object):
         self.gmail = QtWidgets.QLineEdit(Dialog)
         self.gmail.setGeometry(QtCore.QRect(940, 440, 321, 41))
         self.gmail.setObjectName("gmail")
+        self.IMEIBox = QtWidgets.QLineEdit(Dialog)
+        self.IMEIBox.setGeometry(QtCore.QRect(940, 620, 321, 41))
+        self.IMEIBox.setObjectName("IMEIBox")
+        self.Label = QtWidgets.QLabel(Dialog)
+        self.Label.setGeometry(QtCore.QRect(940, 590, 341, 25))
+        self.Label.setObjectName("Label")
+        self.trckBtn = QtWidgets.QPushButton(Dialog)
+        self.trckBtn.setGeometry(QtCore.QRect(940, 680, 321, 46))
+        self.trckBtn.setObjectName("trckBtn")
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept)
@@ -75,6 +84,8 @@ class Ui_Dialog(object):
         self.closeBtn.setText(_translate("Dialog", "Close AirCore Valve"))
         self.label_3.setText(_translate("Dialog", "Email Address (must be gmail)"))
         self.label_4.setText(_translate("Dialog", "Password"))
+        self.Label.setText(_translate("Dialog", "Iridium IMEI (enter before starting)"))
+        self.trckBtn.setText(_translate("Dialog", "Start Tracking"))
 
 
 if __name__ == "__main__":

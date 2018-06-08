@@ -176,7 +176,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="IMEIBox">
    <property name="geometry">
     <rect>
      <x>940</x>
@@ -186,17 +186,30 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="IMEIBox">
+  <widget class="QLabel" name="Label">
    <property name="geometry">
     <rect>
      <x>940</x>
      <y>590</y>
-     <width>121</width>
+     <width>341</width>
      <height>25</height>
     </rect>
    </property>
    <property name="text">
-    <string>Iridium IMEI</string>
+    <string>Iridium IMEI (enter before starting)</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="trckBtn">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>680</y>
+     <width>321</width>
+     <height>46</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Start Tracking</string>
    </property>
   </widget>
  </widget>
