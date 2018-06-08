@@ -176,6 +176,29 @@
     </rect>
    </property>
   </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>620</y>
+     <width>321</width>
+     <height>41</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="IMEIBox">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>590</y>
+     <width>121</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Iridium IMEI</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
