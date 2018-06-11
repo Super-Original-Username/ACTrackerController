@@ -41,7 +41,6 @@ class WebEngine(QtWebEngine):
 
 
 class MainWindow(Ui_Dialog):
-
     newCoords = pyqtSignal(GetData)
 
     no_iridium = pyqtSignal()
@@ -52,7 +51,9 @@ class MainWindow(Ui_Dialog):
 
         self.cmdThread = EventThread()
         self.cmdThread.daemon = True
-        # self.iridiumThread.start()
+        self.iridium_thread = EventThread()
+        self.iridium_thread.daemon = True
+        self.iridium_thread.start()
         self.cmdThread.start()
 
         # Setup for the main window buttons
@@ -62,13 +63,17 @@ class MainWindow(Ui_Dialog):
         self.idleBtn.clicked.connect(self.send_idle)
         self.trckBtn.clicked.connect(self.start_tracking)
 
+        self.db_host = 'eclipse.rci.montana.edu'
+        self.db_user = 'antenna'
+        self.db_pass = 'tracker'
+        self.db_name = 'freemanproject'
+
         self.IMEI = ''
         self.email = ''
         self.passwd = ''
         self.error_dialog = QtWidgets.QErrorMessage()
         self.error_dialog.setWindowTitle('ERROR - Missing Information')
         self.error_dialog.setModal(True)
-
 
     def close_valve(self):
         self.fetch_email()
@@ -93,6 +98,10 @@ class MainWindow(Ui_Dialog):
             print('No IMEI entered, please enter one before starting tracking')
         else:
             self.IMEI = str(self.IMEIBox.text())
+            self.getData = GetData(self, self.db_host, self.db_user, self.db_pass, self.db_name, self.IMEI)
+            self.getData.moveToThread(self.iridium_thread)
+            self.GetData.set_interrupt.connect(self.getData.interrupt())
+            self.getData.start.emit()
             print('Initializing tracking for modem with IMEI %s' % self.IMEI)
 
     def fetch_email(self):
@@ -104,9 +113,11 @@ class MainWindow(Ui_Dialog):
         # This line probably isn't secure, but I'm still pretty new to python, so what can you do?
 
     def update_position(self, new_data):
-        self.log_data
+        if ((new_data.get_lat() == 0.0) or (new_data.get_lon == 0.0) or (new_data.get_alt() == 0.0)):
+            return
 
-
+        if new_data.get_seconds() < self.current.get_seconds():
+            return
 
 
 app = QtWidgets.QApplication(sys.argv)

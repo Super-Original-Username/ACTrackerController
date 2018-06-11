@@ -38,7 +38,7 @@ class GetData(QtCore.QObject):
                 try:
                     database = MySQLdb.connect(host=self.host, user=self.user, passwd=self.passwd, db=self.name)
                     cursor = database.cursor()
-                    cmd = "select gps_fltDate,gps_time,gps_lat,gps_long,gps_alt from gps where gps_IMEI = %s order by pri_key DESC LIMIT 1" % (
+                    cmd = "gps_lat,gps_long,gps_alt,gps_time from gps where gps_IMEI = %s order by pri_key DESC LIMIT 1" % (
                         IMEI)
                     cursor.execute(cmd)
                     connected = True
@@ -59,18 +59,22 @@ class GetData(QtCore.QObject):
                     results = cursor.fetchone()
                     if results is not prev:
                         prev = results
-                        time = results[1]
+                        time = results[1].split(':')
+                        hours = int(time[1])
+                        minutes = int(time[2])
+                        seconds = int(time[3])
+                        seconds = seconds + (60 * minutes) + (3600 * hours)
                         lat = float(results[2])
                         lon = float(results[3])
                         alt = float(results[4])
 
                         try:
-                            newLoc = Updater(time, lat, lon, alt)
+                            new_loc = Updater(time, lat, lon, alt, seconds)
                         except:
                             print('Error updating from data')
 
                         try:
-                            self.mainWindow.newCoords.emit(newLoc)
+                            self.mainWindow.newCoords.emit(new_loc)
                         except Exception as e:
                             print(str(e))
                 except:

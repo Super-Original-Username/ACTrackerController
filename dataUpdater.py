@@ -1,9 +1,10 @@
 class Updater(object):
-    def __init__(self, latitude, longitude, altitude, time):
+    def __init__(self, latitude, longitude, altitude, time, seconds):
         self.lat = latitude
         self.lon = longitude
         self.alt = altitude
         self.time = time
+        self.seconds = seconds
 
     def get_lat(self):
         return self.lat
@@ -16,3 +17,6 @@ class Updater(object):
 
     def get_time(self):
         return self.time
+
+    def get_seconds(self):
+        return self.seconds
