@@ -119,8 +119,9 @@ class MainWindow(Ui_Dialog):
             self.IMEI = str(self.IMEIBox.text())
             self.getData = GetData(self, self.db_host, self.db_user, self.db_pass, self.db_name, self.IMEI)
             self.getData.moveToThread(self.iridium_thread)
-            self.GetData.set_interrupt.connect(self.getData.interrupt())
             self.getData.start.emit()
+            new_data = self.getData.fetch_from_database()
+            self.update_position(new_data)
             print('Initializing tracking for modem with IMEI %s' % self.IMEI)
 
     def fetch_email(self):

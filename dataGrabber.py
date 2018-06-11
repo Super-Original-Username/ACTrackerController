@@ -27,9 +27,7 @@ class GetData(QtCore.QObject):
         self.IMEI = IMEI
         self.inter = False
 
-        self.mainWindow.historicCoords.connect(self.mainWindow.update_position())
-
-    def fetch_from_database(self, IMEI):
+    def fetch_from_database(self):
         connected = False
         attempts = 0
         while not connected and not self.inter:
@@ -39,7 +37,7 @@ class GetData(QtCore.QObject):
                     database = MySQLdb.connect(host=self.host, user=self.user, passwd=self.passwd, db=self.name)
                     cursor = database.cursor()
                     cmd = "gps_lat,gps_long,gps_alt,gps_time from gps where gps_IMEI = %s order by pri_key DESC LIMIT 1" % (
-                        IMEI)
+                        self.IMEI)
                     cursor.execute(cmd)
                     connected = True
 
