@@ -19,10 +19,28 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 import math
+import numpy as np
 import MySQLdb
 
 from trckGUI import Ui_Dialog
 from dataGrabber import GetData
+
+
+class Unbuffered:
+    """ A class to eliminate the serial buffer """
+
+    def __init__(self, stream):
+        self.stream = stream
+
+    def write(self, data):
+        self.stream.write(data)
+        self.stream.flush()
+
+    def flush(self):
+        self.stream.flush()
+
+    def close(self):
+        self.stream.close()
 
 
 class EventThread(QThread):
@@ -62,6 +80,7 @@ class MainWindow(Ui_Dialog):
         self.openBtn.clicked.connect(self.open_valve)
         self.idleBtn.clicked.connect(self.send_idle)
         self.trckBtn.clicked.connect(self.start_tracking)
+        self.currentCoords.insertRow(0)
 
         self.db_host = 'eclipse.rci.montana.edu'
         self.db_user = 'antenna'
@@ -113,17 +132,33 @@ class MainWindow(Ui_Dialog):
         # This line probably isn't secure, but I'm still pretty new to python, so what can you do?
 
     def update_position(self, new_data):
-        if ((new_data.get_lat() == 0.0) or (new_data.get_lon == 0.0) or (new_data.get_alt() == 0.0)):
+        if new_data.get_lat() == 0.0 or new_data.get_lon == 0.0 or new_data.get_alt() == 0.0:
             return
 
         if new_data.get_seconds() < self.current.get_seconds():
             return
 
+        try:
+            self.update_tables(new_data)
+        except:
+            print("ERROR: The location data could not be updated")
 
-app = QtWidgets.QApplication(sys.argv)
-dialog = QtWidgets.QDialog()
+        self.current = new_data
 
-prog = MainWindow(dialog)
+    def update_tables(self, coords):
+        current_rows = self.historicCoords.rowCount()
+        self.historicCoords.insertRow(current_rows)
+        self.historicCoords.setItem(current_rows, 0, coords.get_lat)
+        self.historicCoords.setItem(current_rows, 1, coords.get_lon)
+        self.historicCoords.setItem(current_rows, 2, coords.get_alt)
+        self.historicCoords.setItem(current_rows, 3, coords.get_time)
 
-dialog.show()
-sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    dialog = QtWidgets.QDialog()
+
+    m_gui = MainWindow(dialog)
+    dialog.show()
+    sys.stdout = Unbuffered(sys.stdout)
+    app.exec_()
