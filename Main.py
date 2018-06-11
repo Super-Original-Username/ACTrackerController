@@ -24,6 +24,7 @@ import MySQLdb
 
 from trckGUI import Ui_Dialog
 from dataGrabber import GetData
+from dataUpdater import Updater
 
 
 class Unbuffered:
@@ -93,6 +94,8 @@ class MainWindow(Ui_Dialog):
         self.error_dialog = QtWidgets.QErrorMessage()
         self.error_dialog.setWindowTitle('ERROR - Missing Information')
         self.error_dialog.setModal(True)
+
+        current_data = Updater(0,0,0,'',0)
 
     def close_valve(self):
         self.fetch_email()
